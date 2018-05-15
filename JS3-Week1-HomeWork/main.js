@@ -45,6 +45,11 @@ getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a9920
         
     });
     console.log(allMovies);
+
+
+// Step 2.2 Calculate the average rating of all the movies.
+const sum_of_ratings = allMovies.map(movie => movie.rating).reduce((accumulator, rating) => accumulator + rating);
+console.log("avegrage rating of all the movies is:", sum_of_ratings / allMovies.length);
 });
     
 
