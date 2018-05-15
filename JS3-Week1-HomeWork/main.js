@@ -78,4 +78,9 @@ const movies_with_keywords = allMovies.filter(movie => {
 }).map(movie => movie.title);
 console.log(movies_with_keywords);
 console.log("total number of movies that contain the keywords:", movies_with_keywords.length);
+
+// Step 2.5 Count the number of movies made between 1980-1989 (including both the years).
+const movies_between_80_89 = allMovies.filter(movie => {if(movie.year >= 1980 && movie.year <= 1989) return movie;}).map(movie => {return {title: movie.title, year: movie.year}});
+console.log(movies_between_80_89);
+console.log("Total number of Movies made between 1980-1989: ", movies_between_80_89.length)
 });
