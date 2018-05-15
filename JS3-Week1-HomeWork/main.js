@@ -52,13 +52,30 @@ const sum_of_ratings = allMovies.map(movie => movie.rating).reduce((accumulator,
 console.log("avegrage rating of all the movies is:", sum_of_ratings / allMovies.length);
 
 // Step 2.3 Count the total number of Good, Average and Bad movies.
-const total_of_good_movies = allMovies.filter(movie => {if (movie.tag === "good") return movie;});
-console.log("Total number of good movies: ", total_of_good_movies.length);
+const all_good_movies = allMovies.filter(movie => {if (movie.tag === "good") return movie;});
+console.log("Total number of good movies: ", all_good_movies.length);
 
-const total_of_avg_movies = allMovies.filter(movie => {if (movie.tag === "Average") return movie;});
-console.log("Total number of Average movies: ", total_of_avg_movies.length);
+const all_avg_movies = allMovies.filter(movie => {if (movie.tag === "Average") return movie;});
+console.log("Total number of Average movies: ", all_avg_movies.length);
 
-const total_of_bad_movies = allMovies.filter(movie => {if (movie.tag === "Bad") return movie;});
-console.log("Total number of bad movies: ", total_of_bad_movies.length);
+const all_bad_movies = allMovies.filter(movie => {if (movie.tag === "Bad") return movie;});
+console.log("Total number of bad movies: ", all_bad_movies.length);
+
+
+// Step 2.4 Count the number of movies containing the following keywords: ["The", "dog", "who", "is", "not", "a", "man"].
+
+let arrayOfKeywords = ["The", "dog", "who", "is", "not", "a", "man"];
+arrayOfKeywords = arrayOfKeywords.map(element => element.toLowerCase());
+
+const movies_with_keywords = allMovies.filter(movie => {
+    const split_title_into_array = movie.title.toLowerCase().split(/[ ,]+/);
+    for(let item of split_title_into_array) {
+        if (arrayOfKeywords.includes(item) === true)
+        return movie.title;
+
+    }
+    
+}).map(movie => movie.title);
+console.log(movies_with_keywords);
+console.log("total number of movies that contain the keywords:", movies_with_keywords.length);
 });
-
