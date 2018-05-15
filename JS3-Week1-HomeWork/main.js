@@ -38,7 +38,7 @@ getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a9920
         if (movie.rating >= 4 && movie.rating < 7) 
             movie.tag = "Average";
 
-        if (movie.rating <= 3)
+        if (movie.rating < 4)
             movie.tag = "Bad";
             
         
@@ -50,6 +50,15 @@ getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a9920
 // Step 2.2 Calculate the average rating of all the movies.
 const sum_of_ratings = allMovies.map(movie => movie.rating).reduce((accumulator, rating) => accumulator + rating);
 console.log("avegrage rating of all the movies is:", sum_of_ratings / allMovies.length);
+
+// Step 2.3 Count the total number of Good, Average and Bad movies.
+const total_of_good_movies = allMovies.filter(movie => {if (movie.tag === "good") return movie;});
+console.log("Total number of good movies: ", total_of_good_movies.length);
+
+const total_of_avg_movies = allMovies.filter(movie => {if (movie.tag === "Average") return movie;});
+console.log("Total number of Average movies: ", total_of_avg_movies.length);
+
+const total_of_bad_movies = allMovies.filter(movie => {if (movie.tag === "Bad") return movie;});
+console.log("Total number of bad movies: ", total_of_bad_movies.length);
 });
-    
 
