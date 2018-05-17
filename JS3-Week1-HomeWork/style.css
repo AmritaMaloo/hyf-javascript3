@@ -1,0 +1,167 @@
+
+* {
+    box-sizing: border-box;
+  }
+
+  h1 {
+    text-align: center;
+  }
+  .tablinks {
+    padding: 20px;
+    font-size: 12px;
+    border: none;
+    background: skyblue;
+    font-weight: bold;
+   
+  }
+/* Style the search field */
+input[type=text] {
+
+  padding: 10px;
+  font-size: 12px;
+  border: outset;
+  border-right: none;
+  
+  width: 100%;
+  background: #f1f1f1;
+  
+}
+
+/* Style the submit button */
+.tosubmit {
+  
+  padding: 10px;
+  float: right;
+  
+  background: #2196F3;
+  color: white;
+  font-size: 12px;
+  border: outset;
+  
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
+  clear: both;
+  
+}
+div.tabbar {
+    
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between; 
+
+  background: skyblue;
+  
+}
+.tabbar .search {
+  display: flex;
+  flex-direction: row;
+  
+}
+  
+.tosubmit:hover {
+  background: #0b7dda;
+}
+
+.message {
+  float: right;
+  margin: 0;
+  color: red;
+}
+.forks_or_stars {
+    font-weight: bold;
+    color: rgb(3, 98, 136);
+    
+}
+
+.repolinks li, .commitList li {
+  line-height: 2em;
+  font-size: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #337ab7;
+}
+
+.commitList li {
+    
+  border-bottom: thin inset #f2f2f2;
+    
+    
+}
+.commitList {
+  list-style-type: none;
+
+}
+
+
+img {
+  border-radius: 50%;
+  
+  
+  
+}
+
+.repolinks li a, div.name a, h2 a {
+  text-decoration: none;
+  color: #337ab7;
+  
+
+}
+.repolinks li a:hover, div.name a:hover, h2 a:hover{
+  border-bottom: thin inset rgb(3, 98, 136);
+  color: rgb(3, 98, 136);
+
+}
+
+
+h2, h3 {
+
+  margin-left: 20px;
+}
+
+.repolinks {
+
+  width: 40%;
+}
+div.img-name{
+  display: flex;
+  margin-top: 20px;
+  flex-direction: row;
+  margin-bottom: 0;
+}
+div.name {
+  height: 50px;
+  width: 200px;
+  
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+div.image {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+div.date-commit {
+  line-height: 1.5em;
+  margin: 0;
+}
+div.name p, div.image img, div.date-commit p {
+  margin: 0;
+}
+.commitList li {
+  line-height: normal;
+}
+
+.tablinks {
+    padding: 10px;
+
+}
+
+
+
+
+
+
+

@@ -6,17 +6,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Search HackYourFuture Repositories</h1>      
-    <div class="search">
-        <input type="text" placeholder="eg. java, angular, html, node, react.." name="search">
-        <button class="tosubmit" type="submit"><i class="fa fa-search"></i></button>
+    <h1>HackYourFuture Repositories</h1>
+
+    <div class="tabbar">
+        <div class="search">
+            <input type="text" placeholder="eg. java, angular, html, node, react.." name="search">
+            <button class="tosubmit" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="tabs">
+            <button class="tablinks btn_MostForked">Most Forked</button>
+            <button class="tablinks btn_LeastForked">Least Forked</button>
+            <button class="tablinks btn_MostStargazers">Most Stargazers</button>
+            <button class="tablinks btn_LeastStargazers">Least Stargazers</button>
+        </div>
     </div>
       
     <div class="repoDiv">
+        <p class="forks_or_stars"></p>
+        
         <ul class="repolinks"></ul>
     </div>
 
-    <p></p>
+    <p class="message"></p>
     <div class="commitDiv" id="commitDivID">
         <h2>heading1</h2>
         <h3>heading2</h3>
