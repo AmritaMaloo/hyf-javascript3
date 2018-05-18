@@ -92,14 +92,18 @@ document.querySelector(".btn_LeastForked").addEventListener('click', getLeastFor
 document.querySelector(".btn_MostStargazers").addEventListener('click', getMostStargazers);
 document.querySelector(".btn_LeastStargazers").addEventListener('click', getLeastStargazers);
 
+
 const h2 = document.querySelector("h2");
 const h3 = document.querySelector("h3");
 const p = document.querySelector('.message');
 const p1 = document.querySelector('.forks_or_stars');
+const ul3 = document.querySelector('.name_and_commits');
 const ul1 = document.querySelector('.repolinks');
 const ul2 = document.querySelector('.commitList');
 h2.style.display = 'none';
 h3.style.display = 'none';
+document.querySelector(".btn_MostCommits").style.display = 'none';
+
 
 //Most and Least Forked
 function getMostForked() {
@@ -221,14 +225,13 @@ function searchedRepos() {
 }
 
 function commitDetails(obj) {
-    h2.innerHTML = "";
-    h3.innerHTML = "";
-       
+    ul3.innerHTML = "";  
     h2.innerHTML = `<a href="${obj.html_url}" target="_blank">${obj.name}</a>`;
     
     h3.innerHTML = "Commits";
     h2.style.display = 'block';
     h3.style.display = 'block';
+    document.querySelector(".btn_MostCommits").style.display = 'block';
 
     const url = obj.url + "/commits";
     ul2.innerHTML = "";
@@ -239,17 +242,73 @@ function commitDetails(obj) {
             li.innerHTML = `<div class="img-name"><div class="image"><a href="${eachobj.author.html_url}" target="_blank"><img src="${eachobj.author.avatar_url} alt="avatar" width="50" height="50"></a></div><div class="name"><p><a href="${eachobj.author.html_url}" target="_blank">${eachobj.commit.author.name}</a></p></div></div><br><div class="date-commit"><p>${eachobj.commit.author.date}<br>${eachobj.commit.message}</p></div>`
             ul2.appendChild(li); 
         }
-         
+        document.querySelector(".btn_MostCommits").addEventListener('click', event => {
+            event.preventDefault();
+            getMostCommits(data);
+        }); 
     });
 }
+function getMostCommits (data) {
+    
+    const authorArray = data.map(element => element.commit.author.name).sort();
+       
+    let name = "";
+    let counter = 0;
+    let max1 = 0;
+    
+    
+    const combined =  [];
+    authorArray.map(element => {
+        if(element !== name) {
+            counter = 0;
+            combined.push({authorname: element, numberofcommits: ++counter});
+          
+            
+        } else {
+            combined.pop();
+            combined.push({authorname: element, numberofcommits: ++counter});
+        }
+        name = element;
+
+    });
+    
+    console.log(combined);
+   
+    
+    
+    
+    for(const item of combined) {
+        if(item.numberofcommits > max1) {
+            max1 = item.numberofcommmits;
+            
+            
+        }
+        
+    }
+    console.log(max1);
+    console.log(combined.filter(item => item.numberofcommits == max1));
+    combined.filter(item => item.numberofcommits === max1).map(item => {
+        const li = document.createElement("li");
+        li.innerHTML = item.authorname + ": " + item.numberofcommits;
+        ul3.appendChild(li);
+        
+    });
+
+
+}
+
+
 
 function clearAllTags() {
     p.innerHTML = "";
     p1.innerHTML = "";
+    ul3.innerHTML = "";
     ul1.innerHTML = "";
     ul2.innerHTML = "";
     h2.innerHTML = "";
     h3.innerHTML = "";
+    document.querySelector(".btn_MostCommits").style.display = "none";
+    
 
 }
 
