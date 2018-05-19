@@ -91,7 +91,7 @@ document.querySelector(".btn_MostForked").addEventListener('click', getMostForke
 document.querySelector(".btn_LeastForked").addEventListener('click', getLeastForked);
 document.querySelector(".btn_MostStargazers").addEventListener('click', getMostStargazers);
 document.querySelector(".btn_LeastStargazers").addEventListener('click', getLeastStargazers);
-
+document.querySelector(".btn_TotalForks").addEventListener('click', getTotalForks);
 
 const h2 = document.querySelector("h2");
 const h3 = document.querySelector("h3");
@@ -159,11 +159,11 @@ function getMostStargazers() {
 }
 function findMaxStar(allRepos) {
     let maxStar = 0;
-    for(let repo of allRepos) {
+    allRepos.map(repo => {
         if(repo.stargazers_count > maxStar) 
         maxStar = repo.stargazers_count;
 
-    }
+    });
     return maxStar;
 }
 function getLeastStargazers() {
@@ -171,11 +171,11 @@ function getLeastStargazers() {
         clearAllTags();    
         const maxStar = findMaxStar(allRepos); 
         let leastStar = maxStar;
-        for(let repo of allRepos) {
+        allRepos.map(repo => {
             if(repo.stargazers_count < leastStar) 
             leastStar = repo.stargazers_count;
 
-        }
+        });
         make_dom_list2(allRepos, leastStar);   
              
         
@@ -190,6 +190,18 @@ function make_dom_list2(allRepos, star) {
         ul1.appendChild(li);
     });
 
+}
+function getTotalForks() {
+    getAjaxData("https://api.github.com/orgs/HackYourFuture/repos", allRepos => {
+        clearAllTags();
+
+        const sum = allRepos.map(repo => repo.forks_count).reduce((accumulator,forkCount) => {
+            return accumulator + forkCount;
+
+        }, 0);
+        p1.innerHTML = "Total number of forks: " + sum;
+    });    
+    
 }
 
 //Searching repositories by userInput
@@ -249,14 +261,13 @@ function commitDetails(obj) {
     });
 }
 function getMostCommits (data) {
-    
-    const authorArray = data.map(element => element.commit.author.name).sort();
+    ul3.innerHTML = "";
+    const authorArray = data.map(element => element.author.login).sort();
        
     let name = "";
     let counter = 0;
     let max1 = 0;
-    
-    
+      
     const combined =  [];
     authorArray.map(element => {
         if(element !== name) {
@@ -271,22 +282,14 @@ function getMostCommits (data) {
         name = element;
 
     });
-    
-    console.log(combined);
-   
-    
-    
-    
-    for(const item of combined) {
-        if(item.numberofcommits > max1) {
-            max1 = item.numberofcommmits;
-            
-            
-        }
         
-    }
-    console.log(max1);
-    console.log(combined.filter(item => item.numberofcommits == max1));
+    combined.map(item => {
+        if(item.numberofcommits > max1) 
+            max1 = item.numberofcommits;
+    
+      
+    });
+    
     combined.filter(item => item.numberofcommits === max1).map(item => {
         const li = document.createElement("li");
         li.innerHTML = item.authorname + ": " + item.numberofcommits;
