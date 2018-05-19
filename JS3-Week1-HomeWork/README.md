@@ -5,7 +5,7 @@ Step 2 : TO find out the specific details of movies from the api : https://gist.
 The outputs of above steps can be seen in console. 
 _____________________________________________________________________________
 
-Step 3: To find out the forks, stargazers, maximum commits in Hackyourfuture repositories using the following apis:  https://api.github.com/orgs/HackYourFuture/repos
+Step 3: To find out the forks, stargazers, maximum commits in Hackyourfuture repositories using the following apis:  https://api.github.com/orgs/HackYourFuture/repos and 
 https://api.github.com/search/repositories?q=user:HackYourFuture+
 
 This can be seen on the HTML page.
