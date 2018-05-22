@@ -30,19 +30,13 @@ function getAjaxData(url, callback) {
 
 getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a99206bcb0ae8d0a4/raw/02d8bc9ec9a73e463b13c44df77a87255def5ab9/movies.json", allMovies => {
  
-    allMovies.map(movie => {  
-        if (movie.rating >= 7) 
+    allMovies.forEach(movie => {  
+        if (movie.rating >= 7) {
             movie.tag = "good";
-            
-        
-        if (movie.rating >= 4 && movie.rating < 7) 
-            movie.tag = "Average";
-
-        if (movie.rating < 4)
-            movie.tag = "Bad";
-            
-        
-        
+        } else if (movie.rating < 4) {
+            movie.tag = "Bad"; 
+        } else { movie.tag = "Average"; }
+           
     });
     console.log(allMovies);
 
@@ -69,9 +63,9 @@ arrayOfKeywords = arrayOfKeywords.map(element => element.toLowerCase());
 
 const movies_with_keywords = allMovies.filter(movie => {
     const split_title_into_array = movie.title.toLowerCase().split(/[ ,]+/);
-    for(let item of split_title_into_array) {
-        if (arrayOfKeywords.includes(item) === true)
-        return movie.title;
+    for(const item of split_title_into_array) {
+        if (arrayOfKeywords.includes(item))
+        return true;
 
     }
     
@@ -93,14 +87,14 @@ document.querySelector(".btn_MostStargazers").addEventListener('click', getMostS
 document.querySelector(".btn_LeastStargazers").addEventListener('click', getLeastStargazers);
 document.querySelector(".btn_TotalForks").addEventListener('click', getTotalForks);
 
-const h2 = document.querySelector("h2");
+const RepoName = document.querySelector("h2");
 const h3 = document.querySelector("h3");
 const p = document.querySelector('.message');
 const p1 = document.querySelector('.forks_or_stars');
 const ul3 = document.querySelector('.name_and_commits');
 const ul1 = document.querySelector('.repolinks');
 const ul2 = document.querySelector('.commitList');
-h2.style.display = 'none';
+RepoName.style.display = 'none';
 h3.style.display = 'none';
 document.querySelector(".btn_MostCommits").style.display = 'none';
 
@@ -110,7 +104,7 @@ function getMostForked() {
     getAjaxData("https://api.github.com/orgs/HackYourFuture/repos", allRepos => {
         const sortedRepos = sort_the_Repos(allRepos);
         const mostForkedRepos = sortedRepos.filter(repo => repo.forks_count == sortedRepos[sortedRepos.length-1].forks_count);
-        make_dom_list(mostForkedRepos);
+        renderRepositories_Forks(mostForkedRepos);
         
     }); 
    
@@ -120,7 +114,7 @@ function getLeastForked() {
     getAjaxData("https://api.github.com/orgs/HackYourFuture/repos", allRepos => {
         const sortedRepos = sort_the_Repos(allRepos);
         const leastForkedRepos = sortedRepos.filter(repo => repo.forks_count == sortedRepos[0].forks_count);
-        make_dom_list(leastForkedRepos);        
+        renderRepositories_Forks(leastForkedRepos);        
         
     });
     
@@ -132,16 +126,16 @@ function sort_the_Repos (allRepos) {
             return -1;
         } else if (a.forks_count > b.forks_count) {
             return 1;
-        } else return 0;
+        } else { return 0; }
     });
     return sortRepos;
 }
-function make_dom_list (forkedRepos) {
+function  renderRepositories_Forks (forkedRepos) {
     p1.innerHTML = "Forks Count is: " + forkedRepos[0].forks_count;
     forkedRepos.map(repo => {
-        const li = document.createElement("li");
-        li.innerHTML =`<a href = "${repo.html_url}">${repo.name}</a>`;
-        ul1.appendChild(li);
+        const li_item = document.createElement("li");
+        li_item.innerHTML =`<a href = "${repo.html_url}">${repo.name}</a>`;
+        ul1.appendChild(li_item);
 
     });
     
@@ -151,7 +145,7 @@ function getMostStargazers() {
     getAjaxData("https://api.github.com/orgs/HackYourFuture/repos", allRepos => {
         clearAllTags();   
         const maxStar = findMaxStar(allRepos); 
-        make_dom_list2(allRepos, maxStar);   
+        renderRepositories_Stars(allRepos, maxStar);   
      
         
     }); 
@@ -176,18 +170,18 @@ function getLeastStargazers() {
             leastStar = repo.stargazers_count;
 
         });
-        make_dom_list2(allRepos, leastStar);   
+        renderRepositories_Stars(allRepos, leastStar);   
              
         
     }); 
    
 }
-function make_dom_list2(allRepos, star) {
+function renderRepositories_Stars(allRepos, star) {
     p1.innerHTML = "Stargazers count is: " + star;
     allRepos.filter(repo => repo.stargazers_count == star).map(repo => {
-        const li = document.createElement("li");
-        li.innerHTML =`<a href = "${repo.html_url}">${repo.name}</a>`;
-        ul1.appendChild(li);
+        const li_item = document.createElement("li");
+        li_item.innerHTML =`<a href = "${repo.html_url}">${repo.name}</a>`;
+        ul1.appendChild(li_item);
     });
 
 }
@@ -238,10 +232,10 @@ function searchedRepos() {
 
 function commitDetails(obj) {
     ul3.innerHTML = "";  
-    h2.innerHTML = `<a href="${obj.html_url}" target="_blank">${obj.name}</a>`;
+    RepoName.innerHTML = `<a href="${obj.html_url}" target="_blank">${obj.name}</a>`;
     
     h3.innerHTML = "Commits";
-    h2.style.display = 'block';
+    RepoName.style.display = 'block';
     h3.style.display = 'block';
     document.querySelector(".btn_MostCommits").style.display = 'block';
 
@@ -280,7 +274,6 @@ function getMostCommits (data) {
             combined.push({authorname: element, numberofcommits: ++counter});
         }
         name = element;
-
     });
         
     combined.map(item => {
@@ -296,22 +289,15 @@ function getMostCommits (data) {
         ul3.appendChild(li);
         
     });
-
-
 }
-
-
-
 function clearAllTags() {
     p.innerHTML = "";
     p1.innerHTML = "";
     ul3.innerHTML = "";
     ul1.innerHTML = "";
     ul2.innerHTML = "";
-    h2.innerHTML = "";
+    RepoName.innerHTML = "";
     h3.innerHTML = "";
     document.querySelector(".btn_MostCommits").style.display = "none";
     
-
 }
-
