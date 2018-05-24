@@ -34,9 +34,11 @@ console.log(arrayOf30nums);
 
 document.querySelector(".btn-AllMovies").addEventListener('click', renderAllMovies);
 document.querySelector(".tosubmit").addEventListener('click', renderSearchedMovies);
+
 const List_of_movies = document.querySelector(".all_movies_list");
 const search_item = document.querySelector('input');
 const message = document.querySelector('.message');
+const show_total_avg = document.querySelector('.total-movies');
 
 function getAjaxData(url) {
     return new Promise((resolve, reject) => {
@@ -63,7 +65,7 @@ function getAjaxData(url) {
     });
 }
 // 2.1 Give each movie a tag: Good (>=7), Average (4-6), Bad (0-3) based on the ratings.
-/*function setTag (allMovies) {
+function setTag (allMovies) {
     allMovies.forEach(movie => {  
         if (movie.rating >= 7) {
             movie.tag = "good";
@@ -71,55 +73,102 @@ function getAjaxData(url) {
             movie.tag = "Bad"; 
         } else { movie.tag = "Average"; }
     });
-}*/
-function makeListOfMovies (movies) {
-    movies.forEach(movie => {
-        const li_item = document.createElement('li');
+    return allMovies;
+}
+// 2.6 Display the average rating of the movies being filtered and displayed.
+function displaySum_Avg (titleRatingArray) {
+  
+    let avg_of_ratings = 0;
+    let sum_of_ratings = 0;
+    const movie_count = titleRatingArray.length;
+    sum_of_ratings =  titleRatingArray.reduce((accumulator, element) => {
+        return accumulator + element.rating;
+    },0);
+    avg_of_ratings = sum_of_ratings / movie_count;
+    show_total_avg.innerHTML = "Total movies: " + movie_count + " and " + "Average rating: " + avg_of_ratings;
+}
+// 2.5 Display only the movies in the list which match the two filter criterion above.
+// 2.2 Render all the movies as a list
+function makeListOfMovies (movie) {
+    
+        let li_item = document.createElement('li');
         li_item.innerHTML = movie.title;
         List_of_movies.appendChild(li_item);
-    });
+        
+       
 }
 //Render all the movies as a list (similar to how you were presenting Github repositories in the homework before).
 function renderAllMovies () {
     List_of_movies.innerHTML = "";
+    message.innerHTML = " ";
+    show_total_avg.innerHTML = " " ;
     getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a99206bcb0ae8d0a4/raw/02d8bc9ec9a73e463b13c44df77a87255def5ab9/movies.json")
         
         .then(allMovies => {
             
-            makeListOfMovies(allMovies);       
+            allMovies.forEach(makeListOfMovies) ;       
         })
         .catch((error) => {
             console.log(error);
         });
 }
 //Add a input field, and a button to perform search. Use .filter method on arrays to filter on the titles.
+//Add 4 radio buttons for each tag + All tag (All, Excellent, Very Good, Good) and filter the movies based on the tag selected.
 function renderSearchedMovies() {
     getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a99206bcb0ae8d0a4/raw/02d8bc9ec9a73e463b13c44df77a87255def5ab9/movies.json")
         .then(allMovies => {
             List_of_movies.innerHTML = "";
-            message.innerHTML = "";
-            const array_of_titles = allMovies.map(movie => movie.title);
-                       
-            const split_searchitem_intoarray = (search_item.value).toLowerCase().split(/[ ,]+/);
-            array_of_titles.filter(title => { 
-                const split_title = title.toLowerCase().split(/[ ,]+/)
+            message.innerHTML = " ";
+            show_total_avg.innerHTML = " ";
+            const all_movie_withtags =  setTag(allMovies);
+            let array_of_titles = [];
+            let movie_ratings = [];
+            if(document.querySelector(".all-movies").checked) {
+                title_rating_array = all_movie_withtags.map(movie => { return {"title": movie.title, "rating": movie.rating} });
+               
+            } else if(document.querySelector(".good-movies").checked) {
+                title_rating_array = all_movie_withtags.filter(movie => movie.tag === "good").map(movie => { return {"title": movie.title, "rating": movie.rating} });
+               
+            } else if(document.querySelector(".bad-movies").checked) {
+                title_rating_array = all_movie_withtags.filter(movie => movie.tag === "Bad").map(movie => { return {"title": movie.title, "rating": movie.rating} });
             
-                for(let item of split_title) {
-                
-                    if(split_searchitem_intoarray.includes(item)) {
-                        const li_item = document.createElement('li');
-                        
-                        li_item.innerHTML = title;
-                       
-                        List_of_movies.appendChild(li_item);
+            } else if(document.querySelector(".avg-movies").checked) {
+                title_rating_array = all_movie_withtags.filter(movie => movie.tag === "Average").map(movie => { return {"title": movie.title, "rating": movie.rating} });
+            
+            } else  { 
+                message.innerHTML = "Please select atleast one option";
+                return ;
+            }
+            
+            if(search_item.value === "") {
+                title_rating_array.forEach(makeListOfMovies);
+                displaySum_Avg(title_rating_array);
+            } else {
+                const split_searchitem_intoarray = (search_item.value).toLowerCase().split(" ");
+                const filteredMovies = [];
+                title_rating_array.filter(element => { 
+                    const split_title = (element.title).toLowerCase().split(" ");
+                    
+                    for(let item of split_title) {
+                    
+                        if(split_searchitem_intoarray.includes(item)) {
+                            
+                            filteredMovies.push(element);
+                            
 
+                        }
+                        
                     }
                     
-                }
-                if(typeof(li_item) === "undefined"){
+                }); 
+                if(filteredMovies.length == 0) {
                     message.innerHTML = "No movies found";
+                } else {
+                    filteredMovies.forEach(makeListOfMovies);
+                    displaySum_Avg(filteredMovies);
                 }
-            }); 
+            } 
+            
         })
         .catch((error) => {
             console.log(error);

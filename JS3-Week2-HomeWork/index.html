@@ -10,18 +10,42 @@
 
     <div class="tabbar">
         <div class="search">
+            
             <input type="text" placeholder="Movie names" name="search">
             <button class="tosubmit" type="submit"><i class="fa fa-search"></i></button>
+            
+        
+
+
         </div>
         <div class="tabs">
             <button class="tablinks btn-AllMovies">All Movies</button>
         </div>
+        
+        
+    </div>
+    <div class="radio-buttons">
+            <input class="all-movies" type="radio" name="show-movies"
+                value="allmovies">
+            <label for="allmovies">all</label>
+            
+            <input class="good-movies" type="radio" name="show-movies"
+                value="goodmovies">
+            <label for="goodmovies">good</label>
+
+            <input class="bad-movies" type="radio" name="show-movies"
+                value="badmovies">
+            <label for="badmovies">bad</label>
+
+            <input class="avg-movies" type="radio" name="show-movies"
+                value="avgmovies">
+            <label for="avgmovies">average</label>
     </div>
         
-    
-        <ul class="all_movies_list"></ul>
-   
+    <p class="total-movies"></p>
 
+    <ul class="all_movies_list"></ul>
+    
     <p class="message"></p>
     
     <script src="main.js"></script>
