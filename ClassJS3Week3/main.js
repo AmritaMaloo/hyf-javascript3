@@ -1,47 +1,49 @@
 function StudentsFactory(studentsArray, classRoom) {
        
 
-    const array_NameAdded = (newStudentName) => {
+    const addName = (newStudentName) => {
         studentsArray.push(newStudentName);
-        return studentsArray;
-    };
-    const array_NameRemoved = (oldStudentName) => {
+        
+    }
+    const deleteName = (oldStudentName) => {
         studentsArray.splice(studentsArray.indexOf(oldStudentName), 1);
-        return studentsArray;
-    };
-    const emptyArray = () => {
-        const tempArray = studentsArray;
-        return studentsArray = []; 
-    };
+        
+    }
+    const deleteAll = () => {
+        studentsArray = []; 
+    }
     const changeRoom = (newRoom) => {
-        return classRoom = newRoom;
-    };
-    const displayAll = () => {
+        classRoom = newRoom;
+    }
+    const printAll = () => {
         return {
-            currentStudentsArray: studentsArray,
-            currentClass: classRoom
+            studentsArray,
+            classRoom
         };
-    };
+    }
+    
     return {
-        addName: array_NameAdded,
-        deleteName: array_NameRemoved,
-        emptyArray: emptyArray,
-        changeRoom: changeRoom,
-        printAll: displayAll
+        addName,
+        deleteName,
+        deleteAll,
+        changeRoom,
+        printAll
 
     };
     
-};
-const initialStudents = [ 'niels', 'mads' ];
-const room = '3a';
-const studentObjOfFunctions = StudentsFactory(initialStudents, room);
+}
+
+
+const studentObjOfFunctions = StudentsFactory(['niels', 'mads'], '3a');
 console.log("initial array of students and the classroom", studentObjOfFunctions.printAll());
-console.log("Array after adding newstudent", studentObjOfFunctions.addName('younes'));
-console.log("Array after adding another newstudent", studentObjOfFunctions.addName('johny'));
-console.log("Array after deleting 'younes'", studentObjOfFunctions.deleteName('younes'));
-console.log("Show current students and the class", studentObjOfFunctions.printAll());
-console.log("changed classroom", studentObjOfFunctions.changeRoom('3b'));
-console.log("Show current students and the changed class", studentObjOfFunctions.printAll());
-console.log("delete all the students", studentObjOfFunctions.emptyArray());
+studentObjOfFunctions.addName('younes');
+console.log("Array after adding a new students and the classroom", studentObjOfFunctions.printAll());
+studentObjOfFunctions.addName('johny');
+console.log("Array after adding another new student and the class", studentObjOfFunctions.printAll());
+studentObjOfFunctions.deleteName('younes');
+console.log("Array after deleting student 'younes'", studentObjOfFunctions.printAll());
+studentObjOfFunctions.changeRoom('3b');
+console.log("current array of students and the changed class", studentObjOfFunctions.printAll());
+studentObjOfFunctions.deleteAll();
 console.log("Show current students and the class", studentObjOfFunctions.printAll());
 
