@@ -4,23 +4,23 @@ function StudentsFactory(studentsArray, classRoom) {
     const addName = (newStudentName) => {
         studentsArray.push(newStudentName);
         
-    }
+    };
     const deleteName = (oldStudentName) => {
         studentsArray.splice(studentsArray.indexOf(oldStudentName), 1);
         
-    }
+    };
     const deleteAll = () => {
         studentsArray = []; 
-    }
+    };
     const changeRoom = (newRoom) => {
         classRoom = newRoom;
-    }
+    };
     const printAll = () => {
         return {
             studentsArray,
             classRoom
         };
-    }
+    };
     
     return {
         addName,
