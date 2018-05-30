@@ -1,11 +1,11 @@
 function StudentsFactory(studentsArray, classRoom) {
        
 
-    const addName = (newStudentName) => {
+    const add = (newStudentName) => {
         studentsArray.push(newStudentName);
         
     };
-    const deleteName = (oldStudentName) => {
+    const deleteStudent = (oldStudentName) => {
         studentsArray.splice(studentsArray.indexOf(oldStudentName), 1);
         
     };
@@ -16,15 +16,20 @@ function StudentsFactory(studentsArray, classRoom) {
         classRoom = newRoom;
     };
     const printAll = () => {
-        return {
-            studentsArray,
-            classRoom
-        };
-    };
+        if(studentsArray.length == 0) {
+            return 'Zero students in ' + classRoom;
+        } else {
+            const stringOfStudentsArray = [studentsArray.slice(0, -1).join(', '), studentsArray.slice(-1)[0]].join(studentsArray.length < 2 ? '' : ' and ');
+            return stringOfStudentsArray + ' from ' + classRoom;
+        }
+         
+    }; 
+        
+    
     
     return {
-        addName,
-        deleteName,
+        add,
+        deleteStudent,
         deleteAll,
         changeRoom,
         printAll
@@ -34,16 +39,16 @@ function StudentsFactory(studentsArray, classRoom) {
 }
 
 
-const studentObjOfFunctions = StudentsFactory(['niels', 'mads'], '3a');
-console.log("initial array of students and the classroom", studentObjOfFunctions.printAll());
-studentObjOfFunctions.addName('younes');
-console.log("Array after adding a new students and the classroom", studentObjOfFunctions.printAll());
-studentObjOfFunctions.addName('johny');
-console.log("Array after adding another new student and the class", studentObjOfFunctions.printAll());
-studentObjOfFunctions.deleteName('younes');
-console.log("Array after deleting student 'younes'", studentObjOfFunctions.printAll());
-studentObjOfFunctions.changeRoom('3b');
-console.log("current array of students and the changed class", studentObjOfFunctions.printAll());
-studentObjOfFunctions.deleteAll();
-console.log("Show current students and the class", studentObjOfFunctions.printAll());
+const students = StudentsFactory(['niels', 'mads'], '3a');
+console.log("initial:-  ",  students.printAll());
+students.add('younes');
+console.log("Younes Added:- ", students.printAll());
+students.add('johny');
+console.log("Johny Added:- ", students.printAll());
+students.deleteStudent('younes');
+console.log("younes deleted:- ", students.printAll());
+students.changeRoom('3b');
+console.log("classRoom changed:- ", students.printAll());
+students.deleteAll();
+console.log("All students deleted:- ", students.printAll());
 

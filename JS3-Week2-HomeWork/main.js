@@ -30,11 +30,8 @@ for(j = 1; j <=30; j++) {
 console.log(arrayOf30nums);
 
 //Step 2: Using this json file as the source, build a function which does the following:
-
-
 document.querySelector(".btn-AllMovies").addEventListener('click', renderAllMovies);
 document.querySelector(".tosubmit").addEventListener('click', renderSearchedMovies);
-
 const List_of_movies = document.querySelector(".all_movies_list");
 const search_item = document.querySelector('input');
 const message = document.querySelector('.message');
@@ -73,21 +70,8 @@ function setTag (allMovies) {
             movie.tag = "Bad"; 
         } else { movie.tag = "Average"; }
     });
-    return allMovies;
+    
 }
-// 2.6 Display the average rating of the movies being filtered and displayed.
-function displaySum_Avg (titleRatingArray) {
-  
-    let avg_of_ratings = 0;
-    let sum_of_ratings = 0;
-    const movie_count = titleRatingArray.length;
-    sum_of_ratings =  titleRatingArray.reduce((accumulator, element) => {
-        return accumulator + element.rating;
-    },0);
-    avg_of_ratings = sum_of_ratings / movie_count;
-    show_total_avg.innerHTML = "Total movies: " + movie_count + " and " + "Average rating: " + avg_of_ratings;
-}
-// 2.5 Display only the movies in the list which match the two filter criterion above.
 // 2.2 Render all the movies as a list
 function makeListOfMovies (movie) {
     const li_item = document.createElement('li');
@@ -113,80 +97,64 @@ function renderAllMovies () {
             console.log(error);
         });
 }
-
 //Add 4 radio buttons for each tag + All tag (All, Excellent, Very Good, Good) and filter the movies based on the tag selected.
-function check_which_radiobutton(all_movie_withtags) {     
-    let title_rating_array = [];
-    
+function check_which_radiobutton(movie) {     
+     
     if(document.querySelector(".all-movies").checked) {
-        title_rating_array = all_movie_withtags.map(movie => { return {"title": movie.title, "rating": movie.rating} });
+        return true;
         
     } else if(document.querySelector(".good-movies").checked) {
-        title_rating_array = all_movie_withtags.filter(movie => movie.tag === "good").map(movie => { return {"title": movie.title, "rating": movie.rating} });
+        if(movie.tag === "good")
+        return true;
         
     } else if(document.querySelector(".bad-movies").checked) {
-        title_rating_array = all_movie_withtags.filter(movie => movie.tag === "Bad").map(movie => { return {"title": movie.title, "rating": movie.rating} });
+        if(movie.tag === "Bad")
+        return true;
     
     } else if(document.querySelector(".avg-movies").checked) {
-        title_rating_array = all_movie_withtags.filter(movie => movie.tag === "Average").map(movie => { return {"title": movie.title, "rating": movie.rating} });
+        if(movie.tag === "Average")
+        return true;
     
     } else  { 
-        message.innerHTML = "Please select atleast one option";
-        return ;
+        return false;
        
     }
-    return title_rating_array;
+    
 }
 //perform search
-function searchForUserInput (selectedTagMovies) {
+function searchForUserInput (movie) {
+    if(movie.title.toLowerCase().includes(search_item.value.toLowerCase())) 
+        return true;
+    }   
     
-    
-    const split_searchitem_intoarray = (search_item.value).toLowerCase().split(/[^a-zA-Z0-9]/).filter(s => s.length > 0);
-    
-    const filteredMovies = [];
-    selectedTagMovies.filter(element => { 
-        const split_title = (element.title).toLowerCase().split(/[^a-zA-Z0-9]/).filter(s => s.length > 0);
-        let tempArray = []; //to remove duplicate occurences eg. (3 times for the movie "11-11-11")
-        for(const item of split_title) {
-        
-            if(split_searchitem_intoarray.includes(item) && tempArray.includes(item) === false) {
-                
-                filteredMovies.push(element);
-                tempArray.push(item);
-                
-
-            }
-            
-        }
-        
-    }); 
-    return filteredMovies;
-}
 //Add a input field, and a button to perform search. Use .filter method on arrays to filter on the titles.
 function renderSearchedMovies() {
     getAjaxData("https://gist.githubusercontent.com/pankaj28843/08f397fcea7c760a99206bcb0ae8d0a4/raw/02d8bc9ec9a73e463b13c44df77a87255def5ab9/movies.json")
         .then(allMovies => {
             clearTags();
-            const all_movie_withtags =  setTag(allMovies);
-            const selectedTagMovies = check_which_radiobutton (all_movie_withtags);
-            
-            
-            if(search_item.value === "") {
-                selectedTagMovies.forEach(makeListOfMovies);
-                displaySum_Avg(selectedTagMovies);
+            setTag(allMovies);
+            let selectedMovies = [];
+                       
+            if(search_item.value === "") 
+                selectedMovies = allMovies.filter(check_which_radiobutton);
+                           
+             else 
+                selectedMovies = allMovies.filter(check_which_radiobutton).filter(searchForUserInput);
+                
+            if(selectedMovies.length == 0) {
+                message.innerHTML = "No movies found";
             } else {
-                const moviesSearchedByUser = searchForUserInput(selectedTagMovies);
-                             
-                if(moviesSearchedByUser.length == 0) {
-                    message.innerHTML = "No movies found";
-                } else {
-                    moviesSearchedByUser.forEach(makeListOfMovies);
-                    displaySum_Avg(moviesSearchedByUser);
-                }
-            } 
-            
+                selectedMovies.forEach(makeListOfMovies);
+                const avg_of_ratings = selectedMovies.reduce((accumulator, movie) => {
+                    return accumulator + movie.rating;
+                },0) / selectedMovies.length;
+                
+                show_total_avg.innerHTML = "Total movies: " + selectedMovies.length + " and " + "Average rating: " + avg_of_ratings;
+            }
         })
+              
         .catch((error) => {
             console.log(error);
         });
 }
+
