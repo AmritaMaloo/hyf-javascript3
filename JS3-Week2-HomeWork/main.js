@@ -32,7 +32,11 @@ console.log(arrayOf30nums);
 //Step 2: Using this json file as the source, build a function which does the following:
 document.querySelector(".btn-AllMovies").addEventListener('click', renderAllMovies);
 document.querySelector(".tosubmit").addEventListener('click', renderSearchedMovies);
-const List_of_movies = document.querySelector(".all_movies_list");
+const select_decade = document.querySelector(".decade");
+const list_titles = document.querySelector(".movie-titles");
+const list_ratings = document.querySelector(".movie-ratings");
+const list_years = document.querySelector(".movie-years");
+
 const search_item = document.querySelector('input');
 const message = document.querySelector('.message');
 const show_total_avg = document.querySelector('.total-movies');
@@ -74,13 +78,22 @@ function setTag (allMovies) {
 }
 // 2.2 Render all the movies as a list
 function makeListOfMovies (movie) {
-    const li_item = document.createElement('li');
-    li_item.innerHTML = movie.title;
-    List_of_movies.appendChild(li_item);
+    const li_title = document.createElement('li');
+    const li_rating = document.createElement('li');
+    const li_year = document.createElement('li');
+    li_title.innerHTML = movie.title; 
+    li_rating.innerHTML = movie.rating;
+    li_year.innerHTML = movie.year;
+    list_titles.appendChild(li_title);
+    list_ratings.appendChild(li_rating);
+    list_years.appendChild(li_year);
+    
 }
 //Clear all the lists and messages
 function clearTags () {
-    List_of_movies.innerHTML = "";
+    list_titles.innerHTML = "";
+    list_ratings.innerHTML = "";
+    list_years.innerHTML = "";
     message.innerHTML = " ";
     show_total_avg.innerHTML = " " ;
 }
@@ -104,19 +117,42 @@ function check_which_radiobutton(movie) {
         return true;
         
     } else if(document.querySelector(".good-movies").checked) {
-        if(movie.tag === "good")
-        return true;
+        return movie.tag === "good";
+        
         
     } else if(document.querySelector(".bad-movies").checked) {
-        if(movie.tag === "Bad")
-        return true;
+        return movie.tag === "Bad";
+        
     
     } else if(document.querySelector(".avg-movies").checked) {
-        if(movie.tag === "Average")
-        return true;
+        return movie.tag === "Average";
+        
     
     } else  { 
         return false;
+       
+    }
+    
+}
+//Select menu -- Decade 
+function check_which_option_selected (movie) {
+    switch(select_decade.value) {
+        case "1":
+            return movie.year >= 1950 && movie.year <= 1960;
+        case "2": 
+            return movie.year > 1960 && movie.year <= 1970;
+        case "3":
+            return movie.year > 1970 && movie.year <= 1980;
+        case "4":
+            return movie.year > 1980 && movie.year <= 1990;
+        case "5":
+            return movie.year > 1990 && movie.year <= 2000;
+        case "6":
+            return movie.year > 2000 && movie.year <= 2010;
+        case "7":
+            return movie.year > 2010 && movie.year <= 2020;
+        case "8": 
+            return true;
        
     }
     
@@ -136,13 +172,13 @@ function renderSearchedMovies() {
             let selectedMovies = [];
                        
             if(search_item.value === "") 
-                selectedMovies = allMovies.filter(check_which_radiobutton);
+                selectedMovies = allMovies.filter(check_which_radiobutton).filter(check_which_option_selected);
                            
              else 
-                selectedMovies = allMovies.filter(check_which_radiobutton).filter(searchForUserInput);
+                selectedMovies = allMovies.filter(check_which_radiobutton).filter(searchForUserInput).filter(check_which_option_selected);
                 
             if(selectedMovies.length == 0) {
-                message.innerHTML = "No movies found";
+                message.innerHTML = "No movies found Or choose atleast one Radio option or select atleast 1 option from the select menu";
             } else {
                 selectedMovies.forEach(makeListOfMovies);
                 const avg_of_ratings = selectedMovies.reduce((accumulator, movie) => {

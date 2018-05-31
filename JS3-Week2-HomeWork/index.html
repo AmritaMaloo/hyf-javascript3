@@ -9,15 +9,28 @@
     <h1>IMDB Movies</h1>
 
     <div class="tabbar">
+        
         <div class="search">
             
             <input type="text" placeholder="Always click on search" name="search">
+            <select class="decade">
+                    <option value="0">Select any decade*</option>
+
+                    <option value="1">1950-1960</option>
+                    <option value="2">1960-1970</option>
+                    <option value="3">1970-1980</option>
+                    <option value="4">1980-1990</option>
+                    <option value="5">1990-2000</option>
+                    <option value="6">2000-2010</option>
+                    <option value="7">2010-2020</option>
+                    <option value="8">all</option>
+            </select>
             <button class="tosubmit" type="submit"><i class="fa fa-search"></i></button>
             
+        </div> 
         
-
-
-        </div>
+    
+        
         <div class="tabs">
             <button class="tablinks btn-AllMovies">All Movies</button>
         </div>
@@ -41,10 +54,15 @@
                 value="avgmovies">
             <label for="avgmovies">average</label>
     </div>
+    
         
     <p class="total-movies"></p>
-
-    <ul class="all_movies_list"></ul>
+    <div class="All-lists">
+        <ul class="movie-titles"></ul>
+        <ul class="movie-ratings"></ul>
+        <ul class="movie-years"></ul>
+    </div>
+    
     
     <p class="message"></p>
     
