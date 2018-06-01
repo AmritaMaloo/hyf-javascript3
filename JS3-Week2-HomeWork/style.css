@@ -87,6 +87,9 @@ div.tabbar {
 .custom-select, .search {
   float: right;
 }
+.sort {
+  margin-left: 800px;
+}
 
 
 

@@ -32,10 +32,13 @@ console.log(arrayOf30nums);
 //Step 2: Using this json file as the source, build a function which does the following:
 document.querySelector(".btn-AllMovies").addEventListener('click', renderAllMovies);
 document.querySelector(".tosubmit").addEventListener('click', renderSearchedMovies);
+
 const select_decade = document.querySelector(".decade");
 const list_titles = document.querySelector(".movie-titles");
 const list_ratings = document.querySelector(".movie-ratings");
 const list_years = document.querySelector(".movie-years");
+const select_sort = document.querySelector(".sort");
+select_sort.addEventListener('click', sortMovies);
 
 const search_item = document.querySelector('input');
 const message = document.querySelector('.message');
@@ -192,5 +195,58 @@ function renderSearchedMovies() {
         .catch((error) => {
             console.log(error);
         });
+}
+function sortMovies() {
+    const array =  [];
+    const titleList = list_titles.childNodes;
+    const ratingList = list_ratings.childNodes;
+    const yearList = list_years.childNodes;
+    for(i = 0; i < titleList.length; i++) {
+        let obj = {"title": titleList[i].innerHTML,
+                    "rating": ratingList[i].innerHTML,
+                    "year": yearList[i].innerHTML
+                };
+        array.push(obj);
+
+    }
+    selectSort(array);
+    
+}
+function selectSort(array) {
+    switch(select_sort.value) {
+        case "1":
+                       
+            array.sort(function(a, b) {
+            let nameA = a.title.toUpperCase(); // ignore upper and lowercase
+            let nameB = b.title.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            
+            // names must be equal
+            return 0;
+            });
+            
+            break;
+        case "2": 
+            array.sort(function (a, b){
+                return (a.rating * 10 - b.rating * 10) / 10;
+            });
+            
+            break;
+        case "3":
+            array.sort(function (a, b){
+                return a.year - b.year;
+            });
+            break;
+    }
+    list_titles.innerHTML = "";
+    list_ratings.innerHTML = "";
+    list_years.innerHTML = "";
+    array.map(makeListOfMovies);
+    
 }
 
