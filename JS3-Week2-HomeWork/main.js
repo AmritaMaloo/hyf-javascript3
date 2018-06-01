@@ -137,7 +137,7 @@ function check_which_radiobutton(movie) {
     }
     
 }
-//Select menu -- Decade 
+//Select menu -- search by Decade 
 function check_which_option_selected (movie) {
     switch(select_decade.value) {
         case "1":
@@ -196,6 +196,7 @@ function renderSearchedMovies() {
             console.log(error);
         });
 }
+// sort movie by name / rating / year
 function sortMovies() {
     const array =  [];
     const titleList = list_titles.childNodes;
